@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  database:
+    image: postgres:<<VERSION>> # change postgresql version (ex: postgres:9.6)
+    container_name: <<CONTAINER_NAME>> # change container name (ex: db-app-ex1)
+    restart: always # every time start-up will restart
+    environment:
+      POSTGRES_USER: <<USER_DB>> # change user database (ex: root)
+      POSTGRES_PASSWORD: <<PASSWORD_USER_DB>> # change user database password (ex: 123456)
+      POSTGRES_DB: <<DB_NAME>> # change database name (ex: example_database)
+    volumes:
+      - ./bd/init.sql:/docker-entrypoint-initdb.d/init.sql # mapping to file containing initial SQL commands
+    networks: # connecting the database network
+      db: 
+
+  adminer: # adminer, para acesso rápido aos dados do bd
+    image: adminer
+    container_name: <<CONTAINER_NAME>> # change container name (ex: db-app-ex1)
+    restart: always
+    ports:
+      - <<PORT_EXPORT>>:8080 # tell the port you want to rotate the container (ex: 8080:8080)
+    networks: # connecting the database network
+      db:
+
+networks:
+  db:
